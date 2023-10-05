@@ -35,5 +35,6 @@ repl-timeout
 
 
 3. 
-使用 rdb-tool 工具來還原每日備份的rdb檔案，執行上不影響source redis instance 的資源。
+使用 rdb-tool 工具來還原每日備份的rdb檔案 https://github.com/sripathikrishnan/redis-rdb-tools
+執行上不影響source redis instance 的資源。
 
