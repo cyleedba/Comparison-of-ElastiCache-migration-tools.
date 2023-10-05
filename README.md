@@ -14,6 +14,7 @@ RedisShake 是阿里雲所開發的開源工具 有支援 sync / restore / scan 
 SCAN 非阻塞式的獲取keys 能避免lock的問題
 
 但SCAN 和DUMP 指令會對佔用soure redis instance 較多的CPU 資源。
+
 ![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/facc6959-b74a-4028-8e68-4048451a649c)
 
 
@@ -28,6 +29,8 @@ repl-backlog-ttl
 min-replicas-to-write 和 min-replicas-max-lag
 
 repl-timeout
+
+
 ![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/92cdaab3-5f79-478c-8912-93847286932a)
 
 
