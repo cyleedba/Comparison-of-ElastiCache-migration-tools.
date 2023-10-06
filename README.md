@@ -27,10 +27,9 @@ v4 版本相對v3 在執行時，不會有command 與 new connection 衝太高�
 
 要migration 到本地的redis 使用 13.x GB ， 預計要抓快30GB ram 才夠
 
-![Uploading image.png…]()
+![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/e70e1987-0c14-4617-9337-4aea132e0b3b)
 
-
-![Uploading image.png…]()
+![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/18da31b5-a2ad-4a2d-af08-09e84be5b792)
 
 
 2.
