@@ -52,5 +52,15 @@ repl-timeout
 3. 
 使用 rdb-tool 工具來還原每日備份的rdb檔案 https://github.com/sripathikrishnan/redis-rdb-tools
 
+若要過濾掉一些大key 可以搭配 --not-key 指令 
+
+例如要把這幾個大key 給排除 core_user_token_list / core_charm_fans_count: / core_charm_follow_count: / core_game_tbtguil
+
+指令如下:
+
+rdb -c protocol --db 1 --not-key '^core_user_token_list$|^core_charm_fans_count:$|^core_charm_follow_count:$|^core_game_tbtguil$' redis-db-0919-0001.rdb  | redis-cli -p 6380 -n 1 --pipe
+
+
+
 執行上不影響source redis instance 的資源。
 
