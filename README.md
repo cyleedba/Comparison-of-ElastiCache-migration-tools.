@@ -19,7 +19,9 @@ SCAN 非阻塞式的獲取keys 能避免lock的問題
 
 RedisShake使用v3 版本時，有使用lua script 把大key給過濾掉，但v3 相對v4 執行時所使用的多執行緒會短時間上升很多 造成 cmds 與new connection 上升太快。
 
-![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/db08ab2f-2614-48b0-849f-a76a168acb64)  ![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/d37f41cf-b9b5-4823-9949-da3a0960af4d)
+![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/e70e1987-0c14-4617-9337-4aea132e0b3b)
+
+![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/18da31b5-a2ad-4a2d-af08-09e84be5b792)
 
 導致後面新的connection 連不進來，前台報503.504 的錯誤。
 
@@ -27,10 +29,9 @@ v4 版本相對v3 在執行時，不會有command 與 new connection 衝太高�
 
 要migration 到本地的redis 使用 13.x GB ， 預計要抓快30GB ram 才夠
 
-![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/e70e1987-0c14-4617-9337-4aea132e0b3b)
+![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/db08ab2f-2614-48b0-849f-a76a168acb64)  
 
-![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/18da31b5-a2ad-4a2d-af08-09e84be5b792)
-
+![image](https://github.com/lkk147852/redis-migration-tool/assets/23359795/d37f41cf-b9b5-4823-9949-da3a0960af4d)
 
 2.
 
