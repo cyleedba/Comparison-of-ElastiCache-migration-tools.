@@ -26,6 +26,25 @@ def export_snapshot_to_s3(snapshot_name, bucket_name, prefix):
         logger.error(f"Error exporting snapshot {snapshot_name} to S3: {e}")
         return None
 
+def is_snapshot_ready(snapshot_name):
+    client = boto3.client('elasticache', region_name='ap-east-1')
+    try:
+        response = client.describe_snapshots(SnapshotName=snapshot_name)
+        # 檢查快照狀態
+        if response['Snapshots'][0]['SnapshotStatus'] == 'available':
+            return True
+    except Exception as e:
+        logger.error(f"Error checking snapshot {snapshot_name}: {e}")
+    return False
+
+def is_object_exists(bucket_name, object_key):
+    s3 = boto3.client('s3', region_name='ap-east-1')
+    try:
+        s3.head_object(Bucket=bucket_name, Key=object_key)
+        return True
+    except Exception as e:
+        return False
+
 def list_files_from_s3(bucket_name, prefix):
     s3 = boto3.client('s3', region_name='ap-east-1')
     response = s3.list_objects_v2(Bucket=bucket_name, Prefix=prefix)
@@ -80,15 +99,24 @@ if __name__ == '__main__':
         logger.info(f"Exporting snapshot: {snapshot['SnapshotName']} to S3...")
         response = export_snapshot_to_s3(snapshot['SnapshotName'], bucket_name, prefix)
         if response:
-            logger.info(f"Snapshot {snapshot['SnapshotName']} exported successfully.")
+            #等待快照可用
+            while not is_snapshot_ready(snapshot['SnapshotName']):
+                logger.info(f"Waiting for snapshot {snapshot['SnapshotName']} to be ready...")
+                time.sleep(30)  # 每30秒檢查一次
+                logger.info(f"Snapshot {snapshot['SnapshotName']} exported successfully.")
 
-    # 下載已經上傳的備份檔案
-    files_in_s3 = list_files_from_s3(bucket_name, prefix)
-    for filter_name in filter_names:
-        filtered_files = [file_key for file_key in files_in_s3 if file_key.startswith(prefix + filter_name)]
+        # 下載已經上傳的備份檔案
+        files_in_s3 = list_files_from_s3(bucket_name, prefix)
+        for filter_name in filter_names:
+            filtered_files = [file_key for file_key in files_in_s3 if file_key.startswith(prefix + filter_name)]
 
         if filtered_files:
             latest_file, older_files = sort_and_filter_files(filtered_files)
+
+            # 檢查最新的文件是否存在
+            while not is_object_exists(bucket_name, latest_file):
+                logger.info(f"Waiting for file {latest_file} to be available...")
+                time.sleep(30)  # 每30秒檢查一次
 
             # Download the latest file
             destination_path = os.path.join("/tmp", os.path.basename(latest_file))
