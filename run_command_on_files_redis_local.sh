@@ -13,8 +13,8 @@ directory="/tmp"
 # -maxdepth 1 使搜索不會進入子文件夾
 for file in $(find $directory -maxdepth 1 -type f -name "$filename_pattern*-$yesterday-*.rdb"); do
   echo "Processing $file"
-  # 執行您想要的命令 並過濾特定的大key
-  rdb -c protocol --db 1 --not-key '^core_user_token_list$|^core_charm_fans_count:$|^core_charm_follow_count:$|^core_game_tbtguil$' "$file"  | redis-cli -p 6380 -n 1 --pipe
+  # 執行您想要的命令 並過濾特定的大key 
+  /usr/local/bin/rdb -c protocol --db 1 --not-key '^core_user_token_list$|^core_charm_fans_count:$|^core_charm_follow_count:$|^core_game_tbtguil$' "$file"  | redis-cli -p 6380 -n 1 --pipe
 done
 
 
